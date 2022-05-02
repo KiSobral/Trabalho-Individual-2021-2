@@ -21,7 +21,7 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v3
       - name: Run docker
-        run: docker-compose up --build
+        run: docker-compose up --build -d
       - name: Create database tables
         run: docker-compose run app rake db:create
       - name: Create database migrations
@@ -38,3 +38,18 @@ jobs:
         run: docker-compose run app rake db:reset
       - name: Run tests
         run: docker-compose run app rspec
+  lint:
+    name: "Rodar o lint no projeto"
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      - name: Set up Ruby 3.0.0
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
+      - name: Install rubocop
+        run: docker-compose run app gem install rubocop
+      - run: docker-compose run app bundle install
+      - name: Run RuboCop
+        run: docker-compose run app bundle exec rubocop --parallel
