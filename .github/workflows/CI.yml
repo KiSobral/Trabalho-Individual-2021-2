@@ -48,8 +48,5 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.0.0
-      - name: Install rubocop
-        run: docker-compose run app gem install rubocop
-      - run: docker-compose run app bundle install
-      - name: Run RuboCop
-        run: docker-compose run app bundle exec rubocop --parallel
+      - name: Run rubocop
+        run: docker-compose run app bash -c "gem install rubocop; rubocop -l --fail-level F"
