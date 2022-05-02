@@ -1,0 +1,26 @@
+# This workflow uses actions that are not certified by GitHub.  They are
+# provided by a third-party and are governed by separate terms of service,
+# privacy policy, and support documentation.
+#
+# This workflow will install a prebuilt Ruby version, install dependencies, and
+# run tests and linters.
+name: "CI biblioteca"
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+defaults:
+  run:
+    working-directory: ./aplicacao
+jobs:
+  test:
+    name: "Execução dos testes"
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      - name: reset database
+        run: docker-compose run app rake db:reset
+      - name: Run tests
+        run: docker-compose run app rspec
